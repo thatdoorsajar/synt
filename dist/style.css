@@ -570,6 +570,10 @@ table {
  * @import "components/forms";
  */
 
+.trans\:color {
+  transition: color 100ms linear;
+}
+
 .switch {
   position: relative;
   width: 40px;
@@ -586,8 +590,9 @@ table {
   display: block;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #8795a1;
-  border-radius: 1px;
+  border: 2px solid;
+  border-color: #b8c2cc;
+  border-radius: .125rem;
 }
 
 .switch-inner {
@@ -602,14 +607,14 @@ table {
   display: block;
   float: left;
   width: 50%;
-  height: 20px;
+  height: 14px;
   padding: 0;
-  line-height: 16px;
-  font-size: 10px;
-  color: white;
+  line-height: 10px;
+  font-size: 8px;
   box-sizing: border-box;
   border: 2px solid transparent;
   background-clip: padding-box;
+  color: #fff;
 }
 
 .switch-inner:before {
@@ -622,22 +627,23 @@ table {
 .switch-inner:after {
   content: "";
   padding-right: 5px;
-  background-color: #fff;
-  color: #606f7b;
   text-align: right;
+  background-color: #fff;
+  color: #8795a1;
 }
 
 .switch-switch {
   display: block;
   width: 20px;
-  height: 24px;
+  height: 18px;
   margin: 0px;
-  background: #606f7b;
   position: absolute;
   top: 0;
   bottom: 0;
   right: 20px;
   transition: all .1s ease-in;
+  background-color: #b8c2cc;
+  border-radius: .125rem;
 }
 
 .switch-checkbox:checked + .switch-label .switch-inner {

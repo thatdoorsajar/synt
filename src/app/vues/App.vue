@@ -1,10 +1,13 @@
 <template>
     <div>
-        <div style="width:600px;" class="bg-grey-lighter rounded shadow border-2">
-            <nav class="flex justify-between p-4">
-                <h1 class="text-grey">Synt</h1>
+        <div style="width:600px;" class="bg-grey-lighter rounded shadow">
+            <nav class="flex justify-between p-4 pb-0">
+                <h1 class="text-grey" style="line-height: 0.8;">SYNT</h1>
                 <div class="switch">
-                    <input type="checkbox" name="syntOnOffSwitch" class="switch-checkbox">
+                    <input type="checkbox" 
+                        name="syntOnOffSwitch" 
+                        class="switch-checkbox"
+                        :checked="syntOn">
                     <label class="switch-label" 
                         for="syntOnOffSwitch" 
                         @click="toggleSyntOnOff">
@@ -13,7 +16,15 @@
                     </label>
                 </div>
             </nav>
-            <div class="p-4">
+            <div class="flex p-4 pb-0">
+                <synt-osc-one/>
+                <synt-osc-two/>
+            </div>
+            <div class="flex p-4">
+                <synt-filter/>
+                <synt-envelope/>
+            </div>
+            <div class="p-4 pt-0">
                <div id="keyboard"></div>
             </div>
         </div>
@@ -21,7 +32,19 @@
 </template>
 
 <script>
+    import SyntOscOne from './modules/SyntOscOne.vue';
+    import SyntOscTwo from './modules/SyntOscTwo.vue';
+    import SyntFilter from './modules/SyntFilter.vue';
+    import SyntEnvelope from './modules/SyntEnvelope.vue';
+
     export default {
+        components: {
+            SyntOscOne,
+            SyntOscTwo,            
+            SyntFilter,
+            SyntEnvelope
+        },
+
         data() {
             return {
                 keyboard: {},
@@ -44,9 +67,12 @@
 
         methods: {
             toggleSyntOnOff() {
+                console.log('made it!');
                 this.syntOn = !this.syntOn;
                 
                 if (! this.syntOn) return;
+
+                this.setupKeyboard();
             },
 
             setupKeyboard() {

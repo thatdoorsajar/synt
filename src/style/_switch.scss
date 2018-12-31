@@ -1,65 +1,63 @@
 .switch {
-    position: relative; 
+    position: relative;
     width: 40px;
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
     -ms-user-select: none;
 }
 .switch-checkbox {
     display: none;
 }
 .switch-label {
-    display: block; 
-    overflow: hidden; 
+    display: block;
+    overflow: hidden;
     cursor: pointer;
-    border: 2px solid #8795A1;
-    border-radius: 1px;
+    border: 2px solid;
+    @apply border-grey rounded-sm;
 }
 .switch-inner {
-    display: block; 
-    width: 200%; 
+    display: block;
+    width: 200%;
     margin-left: -100%;
     transition: margin .1s ease-in;
 }
 .switch-inner:before, .switch-inner:after {
-    display: block; 
-    float: left; 
-    width: 50%; 
-    height: 20px; 
-    padding: 0; 
-    line-height: 16px;
-    font-size: 10px; 
-    color: white;
+    display: block;
+    float: left;
+    width: 50%;
+    height: 14px;
+    padding: 0;
+    line-height: 10px;
+    font-size: 8px;
     box-sizing: border-box;
     border: 2px solid transparent;
     background-clip: padding-box;
+    @apply text-white;
 }
 .switch-inner:before {
     content: "";
     padding-left: 5px;
-    background-color: #FFFFFF; 
-    color: #FFFFFF;
+    @apply bg-white text-white;
 }
 .switch-inner:after {
     content: "";
     padding-right: 5px;
-    background-color: #FFFFFF;
-    color: #606F7B;
     text-align: right;
+    @apply bg-white text-grey-dark;
 }
 .switch-switch {
-    display: block; 
+    display: block;
     width: 20px;
-    height: 24px;
+    height: 18px;
     margin: 0px;
-    background: #606F7B;
     position: absolute; top: 0; bottom: 0; right: 20px;
-    transition: all .1s ease-in; 
+    transition: all .1s ease-in;
+    @apply bg-grey rounded-sm;
 }
 .switch-checkbox:checked + .switch-label .switch-inner {
     margin-left: 0;
 }
 .switch-checkbox:checked + .switch-label .switch-switch {
     right: 0px; 
-    background-color: #9561E2; 
+    @apply bg-purple;
 }
