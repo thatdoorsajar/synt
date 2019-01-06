@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);/**
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700);/**
  * Import Fonts.
  */
 
@@ -642,7 +642,7 @@ table {
   bottom: 0;
   right: 20px;
   transition: all .1s ease-in;
-  background-color: #b8c2cc;
+  background-color: #606f7b;
   border-radius: .125rem;
 }
 
@@ -652,7 +652,7 @@ table {
 
 .switch-checkbox:checked + .switch-label .switch-switch {
   right: 0px;
-  background-color: #9561e2;
+  background-color: #4dc0b5;
 }
 
 /**

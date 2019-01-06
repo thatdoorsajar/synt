@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div style="width:600px;" class="bg-grey-lighter rounded shadow">
+        <div style="width:606px;" class="bg-grey-darkest rounded shadow-lg">
             <nav class="flex justify-between p-4 pb-0">
-                <h1 class="text-grey" style="line-height: 0.8;">SYNT</h1>
+                <h1 class="text-grey-light font-medium" style="line-height: 0.8;">SiNT</h1>
                 <div class="switch">
                     <input type="checkbox" 
                         name="syntOnOffSwitch" 
@@ -48,68 +48,70 @@
         data() {
             return {
                 keyboard: {},
+                context: {},
+                gainNode: {},
+                oscillators: {},
                 syntOn: false
             }
         },
 
         mounted() {
-            this.keyboard = new QwertyHancock({
-                id: 'keyboard',
-                width: 600,
-                height: 150,
-                octaves: 2,
-                // startNote: 'A3',
-                whiteNotesColour: 'white',
-                blackNotesColour: '#3d4852',
-                hoverColour: '#f3e939'
-            });
+            this.setupKeyboard();
         },
 
         methods: {
             toggleSyntOnOff() {
-                console.log('made it!');
                 this.syntOn = !this.syntOn;
-                
-                if (! this.syntOn) return;
-
-                this.setupKeyboard();
             },
 
             setupKeyboard() {
-                let context = new AudioContext(),
-                    masterVolume = context.createGain(),
-                    oscillators = {};
+                this.keyboard = new QwertyHancock({
+                    id: 'keyboard',
+                    width: 600,
+                    height: 150,
+                    octaves: 2,
+                    startNote: 'C3',
+                    blackKeyColour: '#3d4852',
+                    activeColour: '#a0f0ed'
+                });
 
-                masterVolume.gain.value = 0.2;
+                this.context = new (window.AudioContext || window.webkitAudioContext)();
+                this.gainNode = this.context.createGain();
 
-                masterVolume.connect(context.destination);
+                this.gainNode.gain.value = 0.2;
 
-                this.keyboard.keyDown = function (note, frequency) {
-                    let osc = context.createOscillator(),
-                        osc2 = context.createOscillator();
+                this.gainNode.connect(this.context.destination);
 
-                    osc.frequency.value = frequency;
-                    osc.type = 'sawtooth';
-                    osc.detune.value = -10;
+                this.keyboard.keyDown = (note, frequency) => {
+                    if (! this.syntOn) return;
+
+                    let osc1 = this.context.createOscillator(),
+                        osc2 = this.context.createOscillator();
+
+                    osc1.frequency.value = frequency;
+                    osc1.type = 'sawtooth';
+                    osc1.detune.value = -10;
 
                     osc2.frequency.value = frequency;
                     osc2.type = 'triangle';
                     osc2.detune.value = 10;
 
-                    osc.connect(masterVolume);
-                    osc2.connect(masterVolume);
+                    osc1.connect(this.gainNode);
+                    osc2.connect(this.gainNode);
 
-                    masterVolume.connect(context.destination);
+                    this.gainNode.connect(this.context.destination);
 
-                    oscillators[frequency] = [osc, osc2];
+                    this.oscillators[frequency] = [osc1, osc2];
 
-                    osc.start(context.currentTime);
-                    osc2.start(context.currentTime);
+                    osc1.start(this.context.currentTime);
+                    osc2.start(this.context.currentTime);
                 };
 
-                this.keyboard.keyUp = function (note, frequency) {
-                    oscillators[frequency].forEach(function (oscillator) {
-                        oscillator.stop(context.currentTime);
+                this.keyboard.keyUp = (note, frequency) => {
+                    if (! this.syntOn) return;
+
+                    this.oscillators[frequency].forEach((oscillator) => {
+                        oscillator.stop(this.context.currentTime);
                     });
                 };
             }

@@ -52,12 +52,12 @@
     margin: 0px;
     position: absolute; top: 0; bottom: 0; right: 20px;
     transition: all .1s ease-in;
-    @apply bg-grey rounded-sm;
+    @apply bg-grey-darker rounded-sm;
 }
 .switch-checkbox:checked + .switch-label .switch-inner {
     margin-left: 0;
 }
 .switch-checkbox:checked + .switch-label .switch-switch {
-    right: 0px; 
-    @apply bg-purple;
+    right: 0px;
+    @apply bg-teal;
 }

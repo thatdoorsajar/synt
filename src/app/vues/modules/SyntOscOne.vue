@@ -1,9 +1,9 @@
 <template>
     <div class="w-1/2 pr-2">
-        <div class="border-b-2">
-            <h3 class="text-grey-light">OSC ONE</h3>
+        <div class="border-b-2 border-grey-darker">
+            <h3 class="text-grey-dark font-normal">OSC ONE</h3>
         </div>
-        <div class="flex bg-grey-light p-2 pb-3">
+        <div class="flex bg-grey-darker p-2 pb-3">
             <div class="w-1/3 text-center">
                 <control-knob v-model="filterCut" property-value="cut"/>
             </div>

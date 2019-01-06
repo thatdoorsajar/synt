@@ -24,7 +24,7 @@
                 :x="50"
                 :y="60"
                 text-anchor="middle"
-                class="fill-current font-bold text-center text-3xl text-grey hover:text-grey-darker trans:color">
+                class="fill-current font-normal text-center text-3xl text-grey-dark hover:text-white trans:color">
                 {{ valueDisplay }}
             </text>
         </svg>
@@ -46,7 +46,7 @@
     export default {
         data() {
             return {
-                mouseOver: true
+                mouseOver: false
             }
         },
 
@@ -77,15 +77,15 @@
             },
             'primaryColor': {
                 type: String,
-                default: '#9561e2' // tw purple
+                default: '#fff' // tw purple 9561e2
             },
             'secondaryColor': {
                 type: String,
-                default: '#b8c2cc' // tw grey
+                default: '#3d4852' // tw grey
             },
             'textColor': {
                 type: String,
-                default: '#3d4852' // tw grey darkest
+                default: '#fff' // tw grey darkest
             },
             'strokeWidth': {
                 type: Number,
@@ -167,18 +167,23 @@
                 const dx = e.offsetX - this.size / 2;
                 const dy =  this.size / 2 - e.offsetY;
                 const angle = Math.atan2(dy, dx);
-                let v;
+                let value;
                 /* bit of weird looking logic to map the angles returned by Math.atan2() onto
                     our own unconventional coordinate system */
                 const start = -Math.PI / 2 - Math.PI / 6;
+
                 if (angle > MAX_RADIANS) {
-                    v = mapRange(angle, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
+                    value = mapRange(angle, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
                 } else if (angle < start) {
-                    v = mapRange(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
+                    value = mapRange(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
                 } else {
                     return;
                 }
-                this.$emit('input', Math.round((v - this.min) / this.stepSize) * this.stepSize + this.min);
+
+                this.$emit('input', this.getPosition(value));
+            },
+            getPosition(value) {
+                return Math.round((value - this.min) / this.stepSize) * this.stepSize + this.min;
             },
             onClick(e) {
                 if (!this.disabled) {

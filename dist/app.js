@@ -146,55 +146,63 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       keyboard: {},
+      context: {},
+      gainNode: {},
+      oscillators: {},
       syntOn: false
     };
   },
   mounted: function mounted() {
-    this.keyboard = new QwertyHancock({
-      id: 'keyboard',
-      width: 600,
-      height: 150,
-      octaves: 2,
-      // startNote: 'A3',
-      whiteNotesColour: 'white',
-      blackNotesColour: '#3d4852',
-      hoverColour: '#f3e939'
-    });
+    this.setupKeyboard();
   },
   methods: {
     toggleSyntOnOff: function toggleSyntOnOff() {
-      console.log('made it!');
       this.syntOn = !this.syntOn;
-      if (!this.syntOn) return;
-      this.setupKeyboard();
     },
     setupKeyboard: function setupKeyboard() {
-      var context = new AudioContext(),
-          masterVolume = context.createGain(),
-          oscillators = {};
-      masterVolume.gain.value = 0.2;
-      masterVolume.connect(context.destination);
+      var _this = this;
+
+      this.keyboard = new QwertyHancock({
+        id: 'keyboard',
+        width: 600,
+        height: 150,
+        octaves: 2,
+        startNote: 'C3',
+        blackKeyColour: '#3d4852',
+        activeColour: '#a0f0ed'
+      });
+      this.context = new (window.AudioContext || window.webkitAudioContext)();
+      this.gainNode = this.context.createGain();
+      this.gainNode.gain.value = 0.2;
+      this.gainNode.connect(this.context.destination);
 
       this.keyboard.keyDown = function (note, frequency) {
-        var osc = context.createOscillator(),
-            osc2 = context.createOscillator();
-        osc.frequency.value = frequency;
-        osc.type = 'sawtooth';
-        osc.detune.value = -10;
+        if (!_this.syntOn) return;
+
+        var osc1 = _this.context.createOscillator(),
+            osc2 = _this.context.createOscillator();
+
+        osc1.frequency.value = frequency;
+        osc1.type = 'sawtooth';
+        osc1.detune.value = -10;
         osc2.frequency.value = frequency;
         osc2.type = 'triangle';
         osc2.detune.value = 10;
-        osc.connect(masterVolume);
-        osc2.connect(masterVolume);
-        masterVolume.connect(context.destination);
-        oscillators[frequency] = [osc, osc2];
-        osc.start(context.currentTime);
-        osc2.start(context.currentTime);
+        osc1.connect(_this.gainNode);
+        osc2.connect(_this.gainNode);
+
+        _this.gainNode.connect(_this.context.destination);
+
+        _this.oscillators[frequency] = [osc1, osc2];
+        osc1.start(_this.context.currentTime);
+        osc2.start(_this.context.currentTime);
       };
 
       this.keyboard.keyUp = function (note, frequency) {
-        oscillators[frequency].forEach(function (oscillator) {
-          oscillator.stop(context.currentTime);
+        if (!_this.syntOn) return;
+
+        _this.oscillators[frequency].forEach(function (oscillator) {
+          oscillator.stop(_this.context.currentTime);
         });
       };
     }
@@ -258,7 +266,7 @@ var mapRange = function mapRange(x, inMin, inMax, outMin, outMax) {
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      mouseOver: true
+      mouseOver: false
     };
   },
   props: {
@@ -289,17 +297,17 @@ var mapRange = function mapRange(x, inMin, inMax, outMin, outMax) {
     },
     'primaryColor': {
       type: String,
-      default: '#9561e2' // tw purple
+      default: '#fff' // tw purple 9561e2
 
     },
     'secondaryColor': {
       type: String,
-      default: '#b8c2cc' // tw grey
+      default: '#3d4852' // tw grey
 
     },
     'textColor': {
       type: String,
-      default: '#3d4852' // tw grey darkest
+      default: '#fff' // tw grey darkest
 
     },
     'strokeWidth': {
@@ -379,21 +387,24 @@ var mapRange = function mapRange(x, inMin, inMax, outMin, outMax) {
       var dx = e.offsetX - this.size / 2;
       var dy = this.size / 2 - e.offsetY;
       var angle = Math.atan2(dy, dx);
-      var v;
+      var value;
       /* bit of weird looking logic to map the angles returned by Math.atan2() onto
           our own unconventional coordinate system */
 
       var start = -Math.PI / 2 - Math.PI / 6;
 
       if (angle > MAX_RADIANS) {
-        v = mapRange(angle, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
+        value = mapRange(angle, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
       } else if (angle < start) {
-        v = mapRange(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
+        value = mapRange(angle + 2 * Math.PI, MIN_RADIANS, MAX_RADIANS, this.min, this.max);
       } else {
         return;
       }
 
-      this.$emit('input', Math.round((v - this.min) / this.stepSize) * this.stepSize + this.min);
+      this.$emit('input', this.getPosition(value));
+    },
+    getPosition: function getPosition(value) {
+      return Math.round((value - this.min) / this.stepSize) * this.stepSize + this.min;
     },
     onClick: function onClick(e) {
       if (!this.disabled) {
@@ -18840,15 +18851,18 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "bg-grey-lighter rounded shadow",
-        staticStyle: { width: "600px" }
+        staticClass: "bg-grey-darkest rounded shadow-lg",
+        staticStyle: { width: "606px" }
       },
       [
         _c("nav", { staticClass: "flex justify-between p-4 pb-0" }, [
           _c(
             "h1",
-            { staticClass: "text-grey", staticStyle: { "line-height": "0.8" } },
-            [_vm._v("SYNT")]
+            {
+              staticClass: "text-grey-light font-medium",
+              staticStyle: { "line-height": "0.8" }
+            },
+            [_vm._v("SiNT")]
           ),
           _vm._v(" "),
           _c("div", { staticClass: "switch" }, [
@@ -18966,7 +18980,7 @@ var render = function() {
                 "text",
                 {
                   staticClass:
-                    "fill-current font-bold text-center text-3xl text-grey hover:text-grey-darker trans:color",
+                    "fill-current font-normal text-center text-3xl text-grey-dark hover:text-white trans:color",
                   attrs: { x: 50, y: 60, "text-anchor": "middle" }
                 },
                 [
@@ -19006,7 +19020,7 @@ var render = function() {
   return _c("div", { staticClass: "w-1/2" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex bg-grey-light p-2 pb-3" }, [
+    _c("div", { staticClass: "flex bg-grey-darker p-2 pb-3" }, [
       _c(
         "div",
         { staticClass: "w-1/3 text-center" },
@@ -19068,8 +19082,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "border-b-2" }, [
-      _c("h3", { staticClass: "text-grey-light" }, [_vm._v("ADSR")])
+    return _c("div", { staticClass: "border-b-2 border-grey-darker" }, [
+      _c("h3", { staticClass: "text-grey-dark font-normal" }, [_vm._v("ADSR")])
     ])
   }
 ]
@@ -19097,7 +19111,7 @@ var render = function() {
   return _c("div", { staticClass: "w-1/2 pr-2" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex bg-grey-light p-2 pb-3" }, [
+    _c("div", { staticClass: "flex bg-grey-darker p-2 pb-3" }, [
       _c(
         "div",
         { staticClass: "w-1/3 text-center" },
@@ -19159,8 +19173,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "border-b-2" }, [
-      _c("h3", { staticClass: "text-grey-light" }, [_vm._v("FILTER")])
+    return _c("div", { staticClass: "border-b-2 border-grey-darker" }, [
+      _c("h3", { staticClass: "text-grey-dark font-normal" }, [
+        _vm._v("FILTER")
+      ])
     ])
   }
 ]
@@ -19188,7 +19204,7 @@ var render = function() {
   return _c("div", { staticClass: "w-1/2 pr-2" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex bg-grey-light p-2 pb-3" }, [
+    _c("div", { staticClass: "flex bg-grey-darker p-2 pb-3" }, [
       _c(
         "div",
         { staticClass: "w-1/3 text-center" },
@@ -19250,8 +19266,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "border-b-2" }, [
-      _c("h3", { staticClass: "text-grey-light" }, [_vm._v("OSC ONE")])
+    return _c("div", { staticClass: "border-b-2 border-grey-darker" }, [
+      _c("h3", { staticClass: "text-grey-dark font-normal" }, [
+        _vm._v("OSC ONE")
+      ])
     ])
   }
 ]
@@ -19279,7 +19297,7 @@ var render = function() {
   return _c("div", { staticClass: "w-1/2" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "flex bg-grey-light p-2 pb-3" }, [
+    _c("div", { staticClass: "flex bg-grey-darker p-2 pb-3" }, [
       _c(
         "div",
         { staticClass: "w-1/3 text-center" },
@@ -19341,8 +19359,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "border-b-2" }, [
-      _c("h3", { staticClass: "text-grey-light" }, [_vm._v("OSC TWO")])
+    return _c("div", { staticClass: "border-b-2 border-grey-darker" }, [
+      _c("h3", { staticClass: "text-grey-dark font-normal" }, [
+        _vm._v("OSC TWO")
+      ])
     ])
   }
 ]
