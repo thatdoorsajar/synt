@@ -95,117 +95,18 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/SyntOscOne.vue */ "./src/app/vues/modules/SyntOscOne.vue");
-/* harmony import */ var _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/SyntOscTwo.vue */ "./src/app/vues/modules/SyntOscTwo.vue");
-/* harmony import */ var _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/SyntFilter.vue */ "./src/app/vues/modules/SyntFilter.vue");
-/* harmony import */ var _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/SyntEnvelope.vue */ "./src/app/vues/modules/SyntEnvelope.vue");
+/* harmony import */ var _synths_CompactSint_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./synths/CompactSint.vue */ "./src/app/vues/synths/CompactSint.vue");
+/* harmony import */ var _synths_FullSint_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./synths/FullSint.vue */ "./src/app/vues/synths/FullSint.vue");
 //
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    SyntOscOne: _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    SyntOscTwo: _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    SyntFilter: _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    SyntEnvelope: _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
-  },
-  data: function data() {
-    return {
-      keyboard: {},
-      context: {},
-      gainNode: {},
-      oscillators: {},
-      syntOn: false
-    };
-  },
-  mounted: function mounted() {
-    this.setupKeyboard();
-  },
-  methods: {
-    toggleSyntOnOff: function toggleSyntOnOff() {
-      this.syntOn = !this.syntOn;
-    },
-    setupKeyboard: function setupKeyboard() {
-      var _this = this;
-
-      this.keyboard = new QwertyHancock({
-        id: 'keyboard',
-        width: 600,
-        height: 150,
-        octaves: 2,
-        startNote: 'C3',
-        blackKeyColour: '#3d4852',
-        activeColour: '#a0f0ed'
-      });
-      this.context = new (window.AudioContext || window.webkitAudioContext)();
-      this.gainNode = this.context.createGain();
-      this.gainNode.gain.value = 0.2;
-      this.gainNode.connect(this.context.destination);
-
-      this.keyboard.keyDown = function (note, frequency) {
-        if (!_this.syntOn) return;
-
-        var osc1 = _this.context.createOscillator(),
-            osc2 = _this.context.createOscillator();
-
-        osc1.frequency.value = frequency;
-        osc1.type = 'sawtooth';
-        osc1.detune.value = -10;
-        osc2.frequency.value = frequency;
-        osc2.type = 'triangle';
-        osc2.detune.value = 10;
-        osc1.connect(_this.gainNode);
-        osc2.connect(_this.gainNode);
-
-        _this.gainNode.connect(_this.context.destination);
-
-        _this.oscillators[frequency] = [osc1, osc2];
-        osc1.start(_this.context.currentTime);
-        osc2.start(_this.context.currentTime);
-      };
-
-      this.keyboard.keyUp = function (note, frequency) {
-        if (!_this.syntOn) return;
-
-        _this.oscillators[frequency].forEach(function (oscillator) {
-          oscillator.stop(_this.context.currentTime);
-        });
-      };
-    }
+    CompactSint: _synths_CompactSint_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    FullSint: _synths_FullSint_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
 
@@ -603,6 +504,270 @@ __webpack_require__.r(__webpack_exports__);
       filterRes: 20,
       filterDrive: 10
     };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modules/SyntOscOne.vue */ "./src/app/vues/modules/SyntOscOne.vue");
+/* harmony import */ var _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modules/SyntOscTwo.vue */ "./src/app/vues/modules/SyntOscTwo.vue");
+/* harmony import */ var _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../modules/SyntFilter.vue */ "./src/app/vues/modules/SyntFilter.vue");
+/* harmony import */ var _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../modules/SyntEnvelope.vue */ "./src/app/vues/modules/SyntEnvelope.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    SyntOscOne: _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SyntOscTwo: _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    SyntFilter: _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    SyntEnvelope: _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  data: function data() {
+    return {
+      keyboard: {},
+      context: {},
+      gainNode: {},
+      oscillators: {},
+      syntOn: false
+    };
+  },
+  mounted: function mounted() {
+    this.setupKeyboard(); // var AudioContext = window.AudioContext || window.webkitAudioContext;
+    // var audioCtx = new AudioContext();
+    // var oscillatorNode = audioCtx.createOscillator();
+    // var gainNode = audioCtx.createGain();
+    // var finish = audioCtx.destination;
+    // etc.
+  },
+  methods: {
+    toggleSyntOnOff: function toggleSyntOnOff() {
+      this.syntOn = !this.syntOn;
+
+      if (this.syntOn) {
+        this.setupSynth();
+      }
+    },
+    setupKeyboard: function setupKeyboard() {
+      this.keyboard = new QwertyHancock({
+        id: 'keyboard',
+        width: 600,
+        height: 150,
+        octaves: 2,
+        startNote: 'C3',
+        blackKeyColour: '#3d4852',
+        activeColour: '#a0f0ed'
+      });
+    },
+    setupSynth: function setupSynth() {
+      var _this = this;
+
+      this.context = new (window.AudioContext || window.webkitAudioContext)();
+      this.gainNode = this.context.createGain();
+      this.gainNode.gain.value = 0.2;
+      this.gainNode.connect(this.context.destination);
+
+      this.keyboard.keyDown = function (note, frequency) {
+        if (!_this.syntOn) return;
+
+        var osc1 = _this.context.createOscillator(),
+            osc2 = _this.context.createOscillator();
+
+        osc1.frequency.value = frequency;
+        osc1.type = 'sawtooth';
+        osc1.detune.value = -10;
+        osc2.frequency.value = frequency;
+        osc2.type = 'triangle';
+        osc2.detune.value = 10;
+        osc1.connect(_this.gainNode);
+        osc2.connect(_this.gainNode);
+
+        _this.gainNode.connect(_this.context.destination);
+
+        _this.oscillators[frequency] = [osc1, osc2];
+        osc1.start(_this.context.currentTime);
+        osc2.start(_this.context.currentTime);
+      };
+
+      this.keyboard.keyUp = function (note, frequency) {
+        if (!_this.syntOn) return;
+
+        _this.oscillators[frequency].forEach(function (oscillator) {
+          oscillator.stop(_this.context.currentTime);
+        });
+      };
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modules/SyntOscOne.vue */ "./src/app/vues/modules/SyntOscOne.vue");
+/* harmony import */ var _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modules/SyntOscTwo.vue */ "./src/app/vues/modules/SyntOscTwo.vue");
+/* harmony import */ var _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../modules/SyntFilter.vue */ "./src/app/vues/modules/SyntFilter.vue");
+/* harmony import */ var _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../modules/SyntEnvelope.vue */ "./src/app/vues/modules/SyntEnvelope.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    SyntOscOne: _modules_SyntOscOne_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SyntOscTwo: _modules_SyntOscTwo_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    SyntFilter: _modules_SyntFilter_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    SyntEnvelope: _modules_SyntEnvelope_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  data: function data() {
+    return {
+      keyboard: {},
+      context: {},
+      gainNode: {},
+      oscillators: {},
+      syntOn: false
+    };
+  },
+  mounted: function mounted() {
+    this.setupKeyboard(); // var AudioContext = window.AudioContext || window.webkitAudioContext;
+    // var audioCtx = new AudioContext();
+    // var oscillatorNode = audioCtx.createOscillator();
+    // var gainNode = audioCtx.createGain();
+    // var finish = audioCtx.destination;
+    // etc.
+  },
+  methods: {
+    toggleSyntOnOff: function toggleSyntOnOff() {
+      this.syntOn = !this.syntOn;
+
+      if (this.syntOn) {
+        this.setupSynth();
+      }
+    },
+    setupKeyboard: function setupKeyboard() {
+      this.keyboard = new QwertyHancock({
+        id: 'keyboard',
+        width: 600,
+        height: 150,
+        octaves: 2,
+        startNote: 'C3',
+        blackKeyColour: '#3d4852',
+        activeColour: '#a0f0ed'
+      });
+    },
+    setupSynth: function setupSynth() {
+      var _this = this;
+
+      this.context = new (window.AudioContext || window.webkitAudioContext)();
+      this.gainNode = this.context.createGain();
+      this.gainNode.gain.value = 0.2;
+      this.gainNode.connect(this.context.destination);
+
+      this.keyboard.keyDown = function (note, frequency) {
+        if (!_this.syntOn) return;
+
+        var osc1 = _this.context.createOscillator(),
+            osc2 = _this.context.createOscillator();
+
+        osc1.frequency.value = frequency;
+        osc1.type = 'sawtooth';
+        osc1.detune.value = -10;
+        osc2.frequency.value = frequency;
+        osc2.type = 'triangle';
+        osc2.detune.value = 10;
+        osc1.connect(_this.gainNode);
+        osc2.connect(_this.gainNode);
+
+        _this.gainNode.connect(_this.context.destination);
+
+        _this.oscillators[frequency] = [osc1, osc2];
+        osc1.start(_this.context.currentTime);
+        osc2.start(_this.context.currentTime);
+      };
+
+      this.keyboard.keyUp = function (note, frequency) {
+        if (!_this.syntOn) return;
+
+        _this.oscillators[frequency].forEach(function (oscillator) {
+          oscillator.stop(_this.context.currentTime);
+        });
+      };
+    }
   }
 });
 
@@ -18847,76 +19012,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      {
-        staticClass: "bg-grey-darkest rounded shadow-lg",
-        staticStyle: { width: "606px" }
-      },
-      [
-        _c("nav", { staticClass: "flex justify-between p-4 pb-0" }, [
-          _c(
-            "h1",
-            {
-              staticClass: "text-grey-light font-medium",
-              staticStyle: { "line-height": "0.8" }
-            },
-            [_vm._v("SiNT")]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "switch" }, [
-            _c("input", {
-              staticClass: "switch-checkbox",
-              attrs: { type: "checkbox", name: "syntOnOffSwitch" },
-              domProps: { checked: _vm.syntOn }
-            }),
-            _vm._v(" "),
-            _c(
-              "label",
-              {
-                staticClass: "switch-label",
-                attrs: { for: "syntOnOffSwitch" },
-                on: { click: _vm.toggleSyntOnOff }
-              },
-              [
-                _c("span", { staticClass: "switch-inner" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "switch-switch" })
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex p-4 pb-0" },
-          [_c("synt-osc-one"), _vm._v(" "), _c("synt-osc-two")],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "flex p-4" },
-          [_c("synt-filter"), _vm._v(" "), _c("synt-envelope")],
-          1
-        ),
-        _vm._v(" "),
-        _vm._m(0)
-      ]
-    )
-  ])
+  return _c("full-sint")
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "p-4 pt-0" }, [
-      _c("div", { attrs: { id: "keyboard" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -19363,6 +19461,170 @@ var staticRenderFns = [
       _c("h3", { staticClass: "text-grey-dark font-normal" }, [
         _vm._v("OSC TWO")
       ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2&":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2& ***!
+  \**********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "bg-grey-darkest rounded shadow-lg",
+        staticStyle: { width: "606px" }
+      },
+      [
+        _c("nav", { staticClass: "flex justify-between p-4 pb-0" }, [
+          _c(
+            "h1",
+            {
+              staticClass: "text-grey-light font-normal",
+              staticStyle: { "line-height": "0.8" }
+            },
+            [_vm._v("SiNT")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "switch" }, [
+            _c("input", {
+              staticClass: "switch-checkbox",
+              attrs: { type: "checkbox", name: "syntOnOffSwitch" },
+              domProps: { checked: _vm.syntOn }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "switch-label",
+                attrs: { for: "syntOnOffSwitch" },
+                on: { click: _vm.toggleSyntOnOff }
+              },
+              [
+                _c("span", { staticClass: "switch-inner" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "switch-switch" })
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "flex p-4 pb-0" },
+          [_c("synt-osc-one"), _vm._v(" "), _c("synt-osc-two")],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "flex p-4" },
+          [_c("synt-filter"), _vm._v(" "), _c("synt-envelope")],
+          1
+        ),
+        _vm._v(" "),
+        _vm._m(0)
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "p-4 pt-0" }, [
+      _c("div", { attrs: { id: "keyboard" } })
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "mx-auto mb-6", staticStyle: { "max-width": "600px" } },
+      [
+        _c(
+          "div",
+          { staticClass: "flex p-4 pb-0" },
+          [_c("synt-osc-one"), _vm._v(" "), _c("synt-osc-two")],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "flex p-4" },
+          [_c("synt-filter"), _vm._v(" "), _c("synt-envelope")],
+          1
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(1)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "flex justify-center mb-20" }, [
+      _c(
+        "div",
+        { staticClass: "px-6 py-4 bg-gradient-purple-teal shadow-lg" },
+        [_c("h1", { staticClass: "text-white font-normal" }, [_vm._v("SiNT")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "flex justify-center" }, [
+      _c(
+        "div",
+        { staticClass: "px-6 py-4", staticStyle: { "max-width": "620px" } },
+        [_c("div", { attrs: { id: "keyboard" } })]
+      )
     ])
   }
 ]
@@ -31666,6 +31928,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SyntOscTwo_vue_vue_type_template_id_9f9907a8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SyntOscTwo_vue_vue_type_template_id_9f9907a8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/CompactSint.vue":
+/*!*********************************************!*\
+  !*** ./src/app/vues/synths/CompactSint.vue ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CompactSint.vue?vue&type=template&id=01a35bd2& */ "./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2&");
+/* harmony import */ var _CompactSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CompactSint.vue?vue&type=script&lang=js& */ "./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CompactSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/app/vues/synths/CompactSint.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js&":
+/*!**********************************************************************!*\
+  !*** ./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompactSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompactSint.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/CompactSint.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompactSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2&":
+/*!****************************************************************************!*\
+  !*** ./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2& ***!
+  \****************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompactSint.vue?vue&type=template&id=01a35bd2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/CompactSint.vue?vue&type=template&id=01a35bd2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompactSint_vue_vue_type_template_id_01a35bd2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/FullSint.vue":
+/*!******************************************!*\
+  !*** ./src/app/vues/synths/FullSint.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FullSint.vue?vue&type=template&id=d20ed730& */ "./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730&");
+/* harmony import */ var _FullSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FullSint.vue?vue&type=script&lang=js& */ "./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FullSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/app/vues/synths/FullSint.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FullSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FullSint.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/FullSint.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FullSint_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730&":
+/*!*************************************************************************!*\
+  !*** ./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./FullSint.vue?vue&type=template&id=d20ed730& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/app/vues/synths/FullSint.vue?vue&type=template&id=d20ed730&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FullSint_vue_vue_type_template_id_d20ed730___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
