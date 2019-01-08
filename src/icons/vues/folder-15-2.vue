@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" :width="width" :height="height"><title>folder 15 2</title><g :fill="secondaryfill"><path d="M46,10H24.5l-5.7-7.6C18.611,2.148,18.315,2,18,2H2C1.448,2,1,2.448,1,3v39c0,2.209,1.791,4,4,4h38 c2.209,0,4-1.791,4-4V11C47,10.448,46.552,10,46,10z" :fill="fill"/></g></svg>

@@ -497,6 +497,8 @@ module.exports = {
     '32': '8rem',
     '48': '12rem',
     '64': '16rem',
+    '128': '32rem',
+    '40-rem': '40rem',
     '1/2': '50%',
     '1/3': '33.33333%',
     '2/3': '66.66667%',
@@ -510,6 +512,8 @@ module.exports = {
     '5/6': '83.33333%',
     'full': '100%',
     'screen': '100vw',
+    '600-fix': '600px',
+    '620-fix': '620px',
   },
 
 
@@ -956,8 +960,8 @@ module.exports = {
 
   plugins: [
     require('tailwindcss/plugins/container')({
-      // center: true,
-      // padding: '1rem',
+      center: true,
+      padding: '1rem',
     }),
   ],
 

@@ -18,6 +18,8 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
+
     export default {
         data() {
             return {
@@ -25,6 +27,24 @@
                 filterRes: 20,
                 filterDrive: 10
             }
-        }
+        },
+
+        watch: {
+            filterCut(value) {
+                this.getFilterNode.frequency.value = value * 10;
+            },
+
+            filterRes(value) {
+                this.getFilterNode.Q.value = value / 100;
+            },
+
+            filterDrive(value) {
+                this.getFilterNode.gain.value = value;
+            }
+        },
+
+        computed: mapGetters([
+            'getFilterNode'
+        ])
     }
 </script>

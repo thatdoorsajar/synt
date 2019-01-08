@@ -528,6 +528,10 @@ table {
 
 .container {
   width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 @media (min-width: 576px) {
@@ -580,8 +584,137 @@ table {
   background: linear-gradient(45deg, #9561e2 0%, #4dc0b5 90%);
 }
 
-.trans\:color {
-  transition: color 100ms linear;
+/* Generated using nucleoapp.com */
+
+/* --------------------------------
+
+Icon colors
+
+-------------------------------- */
+
+.icon {
+  display: inline-block;
+  /* icon primary color */
+  color: #4c4c4c;
+  height: 1em;
+  width: 1em;
+}
+
+.icon use {
+  /* icon secondary color - fill */
+  fill: inherit;
+}
+
+.icon.icon-outline use {
+  /* icon secondary color - stroke */
+  stroke: inherit;
+}
+
+/* --------------------------------
+
+Change icon size
+
+-------------------------------- */
+
+.icon-xs {
+  height: .5em;
+  width: .5em;
+}
+
+.icon-sm {
+  height: .8em;
+  width: .8em;
+}
+
+.icon-lg {
+  height: 1.6em;
+  width: 1.6em;
+}
+
+.icon-xl {
+  height: 2em;
+  width: 2em;
+}
+
+/* -------------------------------- 
+
+Align icon and text 
+
+-------------------------------- */
+
+.icon-text-aligner {
+  /* add this class to parent element that contains icon + text */
+  display: flex;
+  align-items: center;
+}
+
+.icon-text-aligner .icon {
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.icon-text-aligner .icon.icon-align-right {
+  margin-right: 0;
+}
+
+.icon-text-aligner .icon use {
+  color: inherit;
+  fill: currentColor;
+}
+
+.icon-text-aligner .icon.icon-outline use {
+  stroke: currentColor;
+}
+
+/* -------------------------------- 
+
+Icon reset values - used to enable color customizations
+
+-------------------------------- */
+
+.icon {
+  fill: currentColor;
+  stroke: none;
+}
+
+.icon.icon-outline {
+  stroke: currentColor;
+}
+
+.icon use {
+  stroke: none;
+}
+
+/* -------------------------------- 
+
+Stroke effects - Nucleo outline icons
+
+- 16px icons -> up to 1px stroke (16px outline icons do not support stroke changes)
+- 24px, 32px icons -> up to 2px stroke
+- 48px, 64px icons -> up to 4px stroke
+
+-------------------------------- */
+
+.icon-outline.icon-stroke-1 {
+  stroke-width: 1px;
+}
+
+.icon-outline.icon-stroke-2 {
+  stroke-width: 2px;
+}
+
+.icon-outline.icon-stroke-3 {
+  stroke-width: 3px;
+}
+
+.icon-outline.icon-stroke-4 {
+  stroke-width: 4px;
+}
+
+.icon-outline.icon-stroke-1 use,
+.icon-outline.icon-stroke-3 use {
+  -webkit-transform: translateX(.5px) translateY(.5px);
+          transform: translateX(.5px) translateY(.5px);
 }
 
 .switch {
@@ -663,6 +796,10 @@ table {
 .switch-checkbox:checked + .switch-label .switch-switch {
   right: 0px;
   background-color: #4dc0b5;
+}
+
+.trans\:color {
+  transition: color 100ms linear;
 }
 
 /**
@@ -6182,12 +6319,20 @@ table {
   width: 16rem;
 }
 
+.w-128 {
+  width: 32rem;
+}
+
 .w-auto {
   width: auto;
 }
 
 .w-px {
   width: 1px;
+}
+
+.w-40-rem {
+  width: 40rem;
 }
 
 .w-1\/2 {
@@ -6240,6 +6385,14 @@ table {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-600-fix {
+  width: 600px;
+}
+
+.w-620-fix {
+  width: 620px;
 }
 
 .z-0 {
@@ -11770,12 +11923,20 @@ table {
     width: 16rem;
   }
 
+  .sm\:w-128 {
+    width: 32rem;
+  }
+
   .sm\:w-auto {
     width: auto;
   }
 
   .sm\:w-px {
     width: 1px;
+  }
+
+  .sm\:w-40-rem {
+    width: 40rem;
   }
 
   .sm\:w-1\/2 {
@@ -11828,6 +11989,14 @@ table {
 
   .sm\:w-screen {
     width: 100vw;
+  }
+
+  .sm\:w-600-fix {
+    width: 600px;
+  }
+
+  .sm\:w-620-fix {
+    width: 620px;
   }
 
   .sm\:z-0 {
@@ -17344,12 +17513,20 @@ table {
     width: 16rem;
   }
 
+  .md\:w-128 {
+    width: 32rem;
+  }
+
   .md\:w-auto {
     width: auto;
   }
 
   .md\:w-px {
     width: 1px;
+  }
+
+  .md\:w-40-rem {
+    width: 40rem;
   }
 
   .md\:w-1\/2 {
@@ -17402,6 +17579,14 @@ table {
 
   .md\:w-screen {
     width: 100vw;
+  }
+
+  .md\:w-600-fix {
+    width: 600px;
+  }
+
+  .md\:w-620-fix {
+    width: 620px;
   }
 
   .md\:z-0 {
@@ -22918,12 +23103,20 @@ table {
     width: 16rem;
   }
 
+  .lg\:w-128 {
+    width: 32rem;
+  }
+
   .lg\:w-auto {
     width: auto;
   }
 
   .lg\:w-px {
     width: 1px;
+  }
+
+  .lg\:w-40-rem {
+    width: 40rem;
   }
 
   .lg\:w-1\/2 {
@@ -22976,6 +23169,14 @@ table {
 
   .lg\:w-screen {
     width: 100vw;
+  }
+
+  .lg\:w-600-fix {
+    width: 600px;
+  }
+
+  .lg\:w-620-fix {
+    width: 620px;
   }
 
   .lg\:z-0 {
@@ -28492,12 +28693,20 @@ table {
     width: 16rem;
   }
 
+  .xl\:w-128 {
+    width: 32rem;
+  }
+
   .xl\:w-auto {
     width: auto;
   }
 
   .xl\:w-px {
     width: 1px;
+  }
+
+  .xl\:w-40-rem {
+    width: 40rem;
   }
 
   .xl\:w-1\/2 {
@@ -28550,6 +28759,14 @@ table {
 
   .xl\:w-screen {
     width: 100vw;
+  }
+
+  .xl\:w-600-fix {
+    width: 600px;
+  }
+
+  .xl\:w-620-fix {
+    width: 620px;
   }
 
   .xl\:z-0 {

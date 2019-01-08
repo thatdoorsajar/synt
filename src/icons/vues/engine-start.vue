@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" :width="width" :height="height"><title>engine start</title><g :fill="secondaryfill"><path d="M24,1A23,23,0,1,0,47,24,23.026,23.026,0,0,0,24,1Zm-1,9a1,1,0,0,1,2,0V22a1,1,0,0,1-2,0Zm1,27a13,13,0,0,1-8.667-22.689,1,1,0,1,1,1.334,1.49,11,11,0,1,0,14.606-.054,1,1,0,1,1,1.322-1.5A13,13,0,0,1,24,37Z" :fill="fill"/></g></svg>
