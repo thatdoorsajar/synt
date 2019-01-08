@@ -5,10 +5,17 @@
         </div>
         <div class="flex bg-grey-darker p-2 pb-3">
             <div class="w-1/3 text-center">
-                <control-knob v-model="oscCent" property-value="dtn"/>
+                <control-knob v-model="oscCent" 
+                    property-value="cnt"
+                    :min="-50"
+                    :max="50"/>
             </div>
             <div class="w-1/3 text-center">
-                <control-knob v-model="oscWave" property-value="wav"/>
+                <control-knob v-model="oscWave" 
+                    property-value="wav"
+                    :min="1"
+                    :max="4"
+                    :value-display-function="waveKnobWords"/>
             </div>
             <div class="w-1/3 text-center">
                 <control-knob v-model="filterDrive" property-value="drv"/>
@@ -24,39 +31,64 @@
     export default {
         data() {
             return {
-                oscCent: 80,
-                oscWave: 20,
+                oscCent: 0,
+                oscWave: 3,
                 filterDrive: 10
             }
         },
 
         watch: {
-            oscCent(detune) {
-                forOwn(this.getSounds, (soundArray, frequency) => {
-                    console.log(frequency, soundArray);
-                    soundArray.forEach(sound => sound.oscSettings(detune));
-                });
+            oscCent: {
+                immediate: true,
+
+                handler(detune) {
+                    this.getOsc1Settings.detune = detune;
+
+                    forOwn(this.getSounds, (soundArray, frequency) => {
+                        soundArray[0].oscSettings(this.getOsc1Settings);
+                    });
+                }
             },
 
-            oscWave(wave) {
-                if (wave >= 0 && wave < 25) {
-                    wave = 'sine';
-                } else if (wave >= 25 && wave < 50) {
-                    wave = 'triangle';
-                } else if (wave >= 50 && wave < 75) {
-                    wave = 'sawtooth';
-                } else if (wave >= 75 && wave <= 100) {
-                    wave = 'square';
-                }
+            oscWave: {
+                immediate: true,
 
-                forOwn(this.getSounds, (soundArray, frequency) => {
-                    soundArray.forEach(sound => sound.oscSettings(this.oscCent, wave));
-                });
+                handler(wave) {
+                    if (wave == 1) {
+                        wave = 'sine';
+                    } else if (wave == 2) {
+                        wave = 'triangle';
+                    } else if (wave == 3) {
+                        wave = 'sawtooth';
+                    } else if (wave == 4) {
+                        wave = 'square';
+                    }
+
+                    this.getOsc1Settings.wave = wave;
+
+                    forOwn(this.getSounds, (soundArray, frequency) => {
+                        soundArray[0].oscSettings(this.getOsc1Settings);
+                    });
+                }
             }
         },
 
         computed: mapGetters([
+            'getOsc1Settings',
             'getSounds'
-        ])
+        ]),
+
+        methods: {
+            waveKnobWords(value) {
+                const map = {
+                    1: 'sin',
+                    2: 'tri',
+                    3: 'saw',
+                    4: 'sqr'
+                }
+
+                return map[value];
+            }
+        }
     }
 </script>

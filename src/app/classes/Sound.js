@@ -4,26 +4,36 @@
  * That way we'll be able to call the Sound multiple times.
  */
 export default class Sound {
-    constructor({ context, gainNode }) {
+    constructor({ context, filterNode, env }) {
         this.context    = context;
+        this.env        = env;
         this.oscillator = this.context.createOscillator();
+        this.gainNode   = this.context.createGain();
 
-        this.oscillator.connect(gainNode);
+        this.oscillator.connect(this.gainNode);
+        this.gainNode.connect(filterNode);
+    }
+
+    oscSettings({ detune, wave }) {
+        this.oscillator.detune.value = detune;
+        this.oscillator.type = wave;
+
+        return this;
     }
 
     play(frequency) {
         this.oscillator.frequency.value = frequency;
-        this.oscSettings(frequency);
+
+        this.gainNode.gain.cancelScheduledValues(this.context.currentTime);
+        this.gainNode.gain.setValueAtTime(0.001, this.context.currentTime);
+        this.gainNode.gain.linearRampToValueAtTime(this.env.vol, this.context.currentTime + this.env.attack);
 
         this.oscillator.start(this.context.currentTime);
     }
 
-    oscSettings(detune = 0, waveType = 'sine') {
-        this.oscillator.detune.value = detune;
-        this.oscillator.type = waveType;
-    }
+    stop() {
+        this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + this.env.release);
 
-    stop(fade = 0.2) {
-        this.oscillator.stop(this.context.currentTime + fade);
+        this.oscillator.stop(this.context.currentTime + this.env.release);
     }
 }

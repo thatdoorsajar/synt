@@ -10,6 +10,7 @@ https://venerons.github.io/Comet/
 https://codepen.io/jakealbaugh/full/qNrZyw/
 https://codepen.io/njmcode/pen/PwaXwB
 https://learningmusic.ableton.com/make-beats/what-are-these-sounds.html
+https://codepen.io/gregh/post/recreating-legendary-8-bit-games-music-with-web-audio-api
 
 // Web Audio API
 https://css-tricks.com/introduction-web-audio-api/

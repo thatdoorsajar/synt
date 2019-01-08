@@ -5,26 +5,58 @@
         </div>
         <div class="flex bg-grey-darker p-2 pb-3">
             <div class="w-1/3 text-center">
-                <control-knob v-model="filterCut" property-value="cut"/>
+                <control-knob v-model="envAttack" property-value="atk"/>
             </div>
             <div class="w-1/3 text-center">
-                <control-knob v-model="filterRes" property-value="res"/>
+                <control-knob v-model="envDecay" property-value="dcy"/>
             </div>
             <div class="w-1/3 text-center">
-                <control-knob v-model="filterDrive" property-value="drv"/>
+                <control-knob v-model="envRelease" property-value="rls"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
+
     export default {
         data() {
             return {
-                filterCut: 80,
-                filterRes: 20,
-                filterDrive: 10
+                envAttack: 10,
+                envDecay: 80,
+                envRelease: 10
             }
-        }
+        },
+
+        watch: {
+            envAttack: {
+                immediate: true,
+
+                handler(value) {
+                    this.getEnvSettings.attack = value / 100;
+                }
+            },
+
+            envDecay: {
+                immediate: true,
+
+                handler(value) {
+                    this.getEnvSettings.decay = value / 100;
+                }
+            },
+
+            envRelease: {
+                immediate: true,
+
+                handler(value) {
+                    this.getEnvSettings.release = value / 100;
+                }
+            }
+        },
+
+        computed: mapGetters([
+            'getEnvSettings'
+        ])
     }
 </script>

@@ -358,6 +358,7 @@ var mapRange = function mapRange(x, inMin, inMax, outMin, outMax) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
@@ -377,14 +378,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      filterCut: 80,
-      filterRes: 20,
-      filterDrive: 10
+      envAttack: 10,
+      envDecay: 80,
+      envRelease: 10
     };
-  }
+  },
+  watch: {
+    envAttack: {
+      immediate: true,
+      handler: function handler(value) {
+        this.getEnvSettings.attack = value / 100;
+      }
+    },
+    envDecay: {
+      immediate: true,
+      handler: function handler(value) {
+        this.getEnvSettings.decay = value / 100;
+      }
+    },
+    envRelease: {
+      immediate: true,
+      handler: function handler(value) {
+        this.getEnvSettings.release = value / 100;
+      }
+    }
+  },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getEnvSettings'])
 });
 
 /***/ }),
@@ -418,27 +441,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      filterType: 1,
       filterCut: 80,
-      filterRes: 20,
-      filterDrive: 10
+      filterRes: 20
     };
   },
   watch: {
+    filterType: function filterType(type) {
+      if (type == 1) {
+        type = 'lowpass';
+      } else if (type == 2) {
+        type = 'highpass';
+      } else if (type == 3) {
+        type = 'bandpass';
+      } else if (type == 4) {
+        type = 'peaking';
+      }
+
+      this.getFilterNode.type = type;
+    },
     filterCut: function filterCut(value) {
       this.getFilterNode.frequency.value = value * 10;
     },
     filterRes: function filterRes(value) {
-      this.getFilterNode.Q.value = value / 100;
-    },
-    filterDrive: function filterDrive(value) {
-      this.getFilterNode.gain.value = value;
+      this.getFilterNode.Q.setValueAtTime(value / 100, this.getContext.currentTime);
     }
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getFilterNode'])
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getContext', 'getFilterNode']),
+  mounted: function mounted() {
+    var _this = this;
+
+    setTimeout(function () {
+      _this.filterType = 1;
+      _this.filterCut = 81;
+      _this.filterRes = 21;
+    }, 200);
+  },
+  methods: {
+    typeKnobWords: function typeKnobWords(value) {
+      var map = {
+        1: 'lpf',
+        2: 'hpf',
+        3: 'bnd',
+        4: 'pkg'
+      };
+      return map[value];
+    }
+  }
 });
 
 /***/ }),
@@ -474,46 +531,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      oscCent: 80,
-      oscWave: 20,
+      oscCent: 0,
+      oscWave: 3,
       filterDrive: 10
     };
   },
   watch: {
-    oscCent: function oscCent(detune) {
-      Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
-        console.log(frequency, soundArray);
-        soundArray.forEach(function (sound) {
-          return sound.oscSettings(detune);
-        });
-      });
-    },
-    oscWave: function oscWave(wave) {
-      var _this = this;
+    oscCent: {
+      immediate: true,
+      handler: function handler(detune) {
+        var _this = this;
 
-      if (wave >= 0 && wave < 25) {
-        wave = 'sine';
-      } else if (wave >= 25 && wave < 50) {
-        wave = 'triangle';
-      } else if (wave >= 50 && wave < 75) {
-        wave = 'sawtooth';
-      } else if (wave >= 75 && wave <= 100) {
-        wave = 'square';
+        this.getOsc1Settings.detune = detune;
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
+          soundArray[0].oscSettings(_this.getOsc1Settings);
+        });
       }
+    },
+    oscWave: {
+      immediate: true,
+      handler: function handler(wave) {
+        var _this2 = this;
 
-      Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
-        soundArray.forEach(function (sound) {
-          return sound.oscSettings(_this.oscCent, wave);
+        if (wave == 1) {
+          wave = 'sine';
+        } else if (wave == 2) {
+          wave = 'triangle';
+        } else if (wave == 3) {
+          wave = 'sawtooth';
+        } else if (wave == 4) {
+          wave = 'square';
+        }
+
+        this.getOsc1Settings.wave = wave;
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
+          soundArray[0].oscSettings(_this2.getOsc1Settings);
         });
-      });
+      }
     }
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getSounds'])
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getOsc1Settings', 'getSounds']),
+  methods: {
+    waveKnobWords: function waveKnobWords(value) {
+      var map = {
+        1: 'sin',
+        2: 'tri',
+        3: 'saw',
+        4: 'sqr'
+      };
+      return map[value];
+    }
+  }
 });
 
 /***/ }),
@@ -527,6 +607,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -546,13 +629,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      filterCut: 80,
-      filterRes: 20,
+      oscCent: 0,
+      oscWave: 2,
       filterDrive: 10
     };
+  },
+  watch: {
+    oscCent: {
+      immediate: true,
+      handler: function handler(detune) {
+        var _this = this;
+
+        this.getOsc2Settings.detune = detune;
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
+          soundArray[1].oscSettings(_this.getOsc2Settings);
+        });
+      }
+    },
+    oscWave: {
+      immediate: true,
+      handler: function handler(wave) {
+        var _this2 = this;
+
+        if (wave == 1) {
+          wave = 'sine';
+        } else if (wave == 2) {
+          wave = 'triangle';
+        } else if (wave == 3) {
+          wave = 'sawtooth';
+        } else if (wave == 4) {
+          wave = 'square';
+        }
+
+        this.getOsc2Settings.wave = wave;
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["forOwn"])(this.getSounds, function (soundArray, frequency) {
+          soundArray[1].oscSettings(_this2.getOsc2Settings);
+        });
+      }
+    }
+  },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getOsc2Settings', 'getSounds']),
+  methods: {
+    waveKnobWords: function waveKnobWords(value) {
+      var map = {
+        1: 'sin',
+        2: 'tri',
+        3: 'saw',
+        4: 'sqr'
+      };
+      return map[value];
+    }
   }
 });
 
@@ -765,11 +903,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       firstSwitch: true
     };
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['getWebAudio', 'getKeyboard']),
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['getWebAudio', 'getOsc1Settings', 'getOsc2Settings', 'getSounds', 'getKeyboard']),
   mounted: function mounted() {
+    this.setupWebAudio();
     this.setupKeyboard();
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['setupWebAudio', 'setKeyboard', 'setSounds', 'stopSounds']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(['setupWebAudio', 'setupKeyboard', 'stopAllSounds']), {
     toggleSyntOnOff: function toggleSyntOnOff() {
       this.syntOn = !this.syntOn;
 
@@ -777,42 +916,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.firstSwitch = false;
         this.setupSynth();
       }
-    },
-    setupKeyboard: function setupKeyboard() {
-      this.setKeyboard(new QwertyHancock({
-        id: 'Keyboard',
-        width: 600,
-        height: 150,
-        octaves: 2,
-        startNote: 'C3',
-        blackKeyColour: '#3d4852',
-        activeColour: '#a0f0ed'
-      }));
+
+      if (!this.syntOn) {
+        this.stopAllSounds();
+      }
     },
     setupSynth: function setupSynth() {
       var _this = this;
-
-      this.setupWebAudio();
 
       this.getKeyboard.keyDown = function (note, frequency) {
         if (!_this.syntOn) return;
         var sound1 = new _classes_Sound__WEBPACK_IMPORTED_MODULE_0__["default"](_this.getWebAudio);
         var sound2 = new _classes_Sound__WEBPACK_IMPORTED_MODULE_0__["default"](_this.getWebAudio);
-        sound1.play(frequency, -10, 'sawtooth');
-        sound2.play(frequency, 10, 'triangle');
-
-        _this.setSounds({
-          frequency: frequency,
-          sounds: [sound1, sound2]
-        });
+        sound1.oscSettings(_this.getOsc1Settings).play(frequency);
+        sound2.oscSettings(_this.getOsc2Settings).play(frequency);
+        _this.getSounds[frequency] = [sound1, sound2];
       };
 
       this.getKeyboard.keyUp = function (note, frequency) {
-        if (!_this.syntOn) return;
-
-        _this.stopSounds(frequency);
-      }; // this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + fade);
-
+        _this.getSounds[frequency].forEach(function (sound) {
+          return sound.stop();
+        });
+      };
     }
   })
 });
@@ -19170,13 +19295,13 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "cut" },
+            attrs: { "property-value": "atk" },
             model: {
-              value: _vm.filterCut,
+              value: _vm.envAttack,
               callback: function($$v) {
-                _vm.filterCut = $$v
+                _vm.envAttack = $$v
               },
-              expression: "filterCut"
+              expression: "envAttack"
             }
           })
         ],
@@ -19188,13 +19313,13 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "res" },
+            attrs: { "property-value": "dcy" },
             model: {
-              value: _vm.filterRes,
+              value: _vm.envDecay,
               callback: function($$v) {
-                _vm.filterRes = $$v
+                _vm.envDecay = $$v
               },
-              expression: "filterRes"
+              expression: "envDecay"
             }
           })
         ],
@@ -19206,13 +19331,13 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "drv" },
+            attrs: { "property-value": "rls" },
             model: {
-              value: _vm.filterDrive,
+              value: _vm.envRelease,
               callback: function($$v) {
-                _vm.filterDrive = $$v
+                _vm.envRelease = $$v
               },
-              expression: "filterDrive"
+              expression: "envRelease"
             }
           })
         ],
@@ -19261,6 +19386,29 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
+            attrs: {
+              "property-value": "drv",
+              min: 1,
+              max: 4,
+              "value-display-function": _vm.typeKnobWords
+            },
+            model: {
+              value: _vm.filterType,
+              callback: function($$v) {
+                _vm.filterType = $$v
+              },
+              expression: "filterType"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "w-1/3 text-center" },
+        [
+          _c("control-knob", {
             attrs: { "property-value": "cut" },
             model: {
               value: _vm.filterCut,
@@ -19286,24 +19434,6 @@ var render = function() {
                 _vm.filterRes = $$v
               },
               expression: "filterRes"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "w-1/3 text-center" },
-        [
-          _c("control-knob", {
-            attrs: { "property-value": "drv" },
-            model: {
-              value: _vm.filterDrive,
-              callback: function($$v) {
-                _vm.filterDrive = $$v
-              },
-              expression: "filterDrive"
             }
           })
         ],
@@ -19354,7 +19484,7 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "dtn" },
+            attrs: { "property-value": "cnt", min: -50, max: 50 },
             model: {
               value: _vm.oscCent,
               callback: function($$v) {
@@ -19372,7 +19502,12 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "wav" },
+            attrs: {
+              "property-value": "wav",
+              min: 1,
+              max: 4,
+              "value-display-function": _vm.waveKnobWords
+            },
             model: {
               value: _vm.oscWave,
               callback: function($$v) {
@@ -19447,13 +19582,13 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "cut" },
+            attrs: { "property-value": "cnt", min: -50, max: 50 },
             model: {
-              value: _vm.filterCut,
+              value: _vm.oscCent,
               callback: function($$v) {
-                _vm.filterCut = $$v
+                _vm.oscCent = $$v
               },
-              expression: "filterCut"
+              expression: "oscCent"
             }
           })
         ],
@@ -19465,13 +19600,18 @@ var render = function() {
         { staticClass: "w-1/3 text-center" },
         [
           _c("control-knob", {
-            attrs: { "property-value": "res" },
+            attrs: {
+              "property-value": "wav",
+              min: 1,
+              max: 4,
+              "value-display-function": _vm.waveKnobWords
+            },
             model: {
-              value: _vm.filterRes,
+              value: _vm.oscWave,
               callback: function($$v) {
-                _vm.filterRes = $$v
+                _vm.oscWave = $$v
               },
-              expression: "filterRes"
+              expression: "oscWave"
             }
           })
         ],
@@ -31972,35 +32112,42 @@ var Sound =
 function () {
   function Sound(_ref) {
     var context = _ref.context,
-        gainNode = _ref.gainNode;
+        filterNode = _ref.filterNode,
+        env = _ref.env;
 
     _classCallCheck(this, Sound);
 
     this.context = context;
+    this.env = env;
     this.oscillator = this.context.createOscillator();
-    this.oscillator.connect(gainNode);
+    this.gainNode = this.context.createGain();
+    this.oscillator.connect(this.gainNode);
+    this.gainNode.connect(filterNode);
   }
 
   _createClass(Sound, [{
+    key: "oscSettings",
+    value: function oscSettings(_ref2) {
+      var detune = _ref2.detune,
+          wave = _ref2.wave;
+      this.oscillator.detune.value = detune;
+      this.oscillator.type = wave;
+      return this;
+    }
+  }, {
     key: "play",
     value: function play(frequency) {
       this.oscillator.frequency.value = frequency;
-      this.oscSettings(frequency);
+      this.gainNode.gain.cancelScheduledValues(this.context.currentTime);
+      this.gainNode.gain.setValueAtTime(0.001, this.context.currentTime);
+      this.gainNode.gain.linearRampToValueAtTime(this.env.vol, this.context.currentTime + this.env.attack);
       this.oscillator.start(this.context.currentTime);
-    }
-  }, {
-    key: "oscSettings",
-    value: function oscSettings() {
-      var detune = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var waveType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'sine';
-      this.oscillator.detune.value = detune;
-      this.oscillator.type = waveType;
     }
   }, {
     key: "stop",
     value: function stop() {
-      var fade = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.2;
-      this.oscillator.stop(this.context.currentTime + fade);
+      this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + this.env.release);
+      this.oscillator.stop(this.context.currentTime + this.env.release);
     }
   }]);
 
@@ -32600,15 +32747,18 @@ var app = new Vue({
 /*!**********************************!*\
   !*** ./src/app/store/getters.js ***!
   \**********************************/
-/*! exports provided: getWebAudio, getContext, getGainNode, getFilterNode, getSounds, getKeyboard */
+/*! exports provided: getWebAudio, getContext, getFilterNode, getMasterGainNode, getOsc1Settings, getOsc2Settings, getEnvSettings, getSounds, getKeyboard */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWebAudio", function() { return getWebAudio; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getContext", function() { return getContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGainNode", function() { return getGainNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFilterNode", function() { return getFilterNode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMasterGainNode", function() { return getMasterGainNode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOsc1Settings", function() { return getOsc1Settings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOsc2Settings", function() { return getOsc2Settings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEnvSettings", function() { return getEnvSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSounds", function() { return getSounds; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getKeyboard", function() { return getKeyboard; });
 /**
@@ -32621,11 +32771,20 @@ var getWebAudio = function getWebAudio(state) {
 var getContext = function getContext(state) {
   return state.webAudio.context;
 };
-var getGainNode = function getGainNode(state) {
-  return state.webAudio.gainNode;
-};
 var getFilterNode = function getFilterNode(state) {
   return state.webAudio.filterNode;
+};
+var getMasterGainNode = function getMasterGainNode(state) {
+  return state.webAudio.masterGainNode;
+};
+var getOsc1Settings = function getOsc1Settings(state) {
+  return state.webAudio.osc1;
+};
+var getOsc2Settings = function getOsc2Settings(state) {
+  return state.webAudio.osc2;
+};
+var getEnvSettings = function getEnvSettings(state) {
+  return state.webAudio.env;
 };
 var getSounds = function getSounds(state) {
   return state.sounds;
@@ -32673,41 +32832,51 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 /*!************************************!*\
   !*** ./src/app/store/mutations.js ***!
   \************************************/
-/*! exports provided: setupWebAudio, setSounds, stopSounds, setKeyboard */
+/*! exports provided: setupWebAudio, setupKeyboard, stopAllSounds */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setupWebAudio", function() { return setupWebAudio; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSounds", function() { return setSounds; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopSounds", function() { return stopSounds; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setKeyboard", function() { return setKeyboard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setupKeyboard", function() { return setupKeyboard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopAllSounds", function() { return stopAllSounds; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
 /**
  * Vuex mutations should be used to update items in the store,
  * rather than directly manipulating the store state.
  */
+
 var setupWebAudio = function setupWebAudio(state) {
   var context = new (window.AudioContext || window.webkitAudioContext)(),
-      gainNode = context.createGain(),
-      filterNode = context.createBiquadFilter();
-  gainNode.gain.value = 0.2;
+      filterNode = context.createBiquadFilter(),
+      masterGainNode = context.createGain();
   filterNode.type = "lowpass";
-  gainNode.connect(filterNode);
-  filterNode.connect(context.destination);
+  masterGainNode.gain.value = 0.3;
+  filterNode.connect(masterGainNode);
+  masterGainNode.connect(context.destination);
   state.webAudio.context = context;
-  state.webAudio.gainNode = gainNode;
+  state.webAudio.masterGainNode = masterGainNode;
   state.webAudio.filterNode = filterNode;
 };
-var setSounds = function setSounds(state, payload) {
-  return state.sounds[payload.frequency] = payload.sounds;
-};
-var stopSounds = function stopSounds(state, frequency) {
-  return state.sounds[frequency].forEach(function (sound) {
-    return sound.stop(0.1);
+var setupKeyboard = function setupKeyboard(state, keyboard) {
+  state.keyboard = new QwertyHancock({
+    id: 'Keyboard',
+    width: 600,
+    height: 150,
+    octaves: 2,
+    startNote: 'C3',
+    blackKeyColour: '#3d4852',
+    activeColour: '#a0f0ed'
   });
 };
-var setKeyboard = function setKeyboard(state, keyboard) {
-  return state.keyboard = keyboard;
+var stopAllSounds = function stopAllSounds(state) {
+  Object(lodash__WEBPACK_IMPORTED_MODULE_0__["forOwn"])(state.sounds, function (soundArray, frequency) {
+    soundArray.forEach(function (sound) {
+      return sound.stop();
+    });
+  });
 };
 
 /***/ }),
@@ -32727,9 +32896,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   webAudio: {
     context: {},
-    gainNode: {},
     filterNode: {},
-    envNode: {}
+    masterGainNode: {},
+    osc1: {
+      detune: 0,
+      wave: 'sawtooth'
+    },
+    osc2: {
+      detune: 0,
+      wave: 'triangle'
+    },
+    env: {
+      vol: 0.3,
+      attack: 0.1,
+      decay: 0.8,
+      release: 0.1
+    }
   },
   keyboard: {},
   sounds: {}

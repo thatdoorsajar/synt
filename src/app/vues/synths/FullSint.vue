@@ -56,19 +56,23 @@
 
         computed: mapGetters([
             'getWebAudio',
+            'getOsc1Settings',
+            'getOsc2Settings',
+            'getSounds',
             'getKeyboard'
         ]),
 
         mounted() {
+            this.setupWebAudio();
+
             this.setupKeyboard();
         },
 
         methods: {
             ...mapMutations([
                 'setupWebAudio',
-                'setKeyboard',
-                'setSounds',
-                'stopSounds'
+                'setupKeyboard',
+                'stopAllSounds'
             ]),
 
             toggleSyntOnOff() {
@@ -79,45 +83,28 @@
 
                     this.setupSynth();
                 }
+
+                if (! this.syntOn) {
+                    this.stopAllSounds();
+                }
             },
 
-            setupKeyboard() {
-                this.setKeyboard(new QwertyHancock({
-                    id: 'Keyboard',
-                    width: 600,
-                    height: 150,
-                    octaves: 2,
-                    startNote: 'C3',
-                    blackKeyColour: '#3d4852',
-                    activeColour: '#a0f0ed'
-                }));
-            },
-
-            setupSynth() {                
-                this.setupWebAudio();
-
+            setupSynth() {
                 this.getKeyboard.keyDown = (note, frequency) => {
                     if (! this.syntOn) return;
 
                     let sound1 = new Sound(this.getWebAudio);
                     let sound2 = new Sound(this.getWebAudio);
 
-                    sound1.play(frequency, -10, 'sawtooth');
-                    sound2.play(frequency, 10, 'triangle');
+                    sound1.oscSettings(this.getOsc1Settings).play(frequency);
+                    sound2.oscSettings(this.getOsc2Settings).play(frequency);
 
-                    this.setSounds({
-                        frequency,
-                        sounds: [sound1, sound2]
-                    });
-                };
+                    this.getSounds[frequency] = [sound1, sound2];
+                }
 
                 this.getKeyboard.keyUp = (note, frequency) => {
-                    if (! this.syntOn) return;
-
-                    this.stopSounds(frequency);
-                };
-
-                // this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + fade);
+                    this.getSounds[frequency].forEach(sound => sound.stop());
+                }
             }
         }
     }
